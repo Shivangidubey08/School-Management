@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import { Button } from '@mui/material';
+import * as React from 'react';
+import StudentTable from './Components/StudentTable/StudentTableComponent';
+import { useDispatch, connect } from 'react-redux';
+import { editStudentList } from './actions/studentAction';
 
-function App() {
+function App(studentList) {
+
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    console.log(studentList);
+  }, [studentList])
+  function filterList() {
+    console.log(typeof (studentList), studentList);
+    const filteredList = studentList.filter((student) => student.name.startsWith("Fro"));
+    dispatch(editStudentList(filteredList));
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Button onClick={filterList}>Test Redux</Button>
+      <StudentTable />
     </div>
   );
 }
-
-export default App;
+const mapStateToProps = (state) => ({
+  studentList: state.studentList
+});
+export default connect(mapStateToProps)(App);
